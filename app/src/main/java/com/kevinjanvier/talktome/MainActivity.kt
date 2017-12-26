@@ -1,10 +1,12 @@
 package com.kevinjanvier.talktome
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.kevinjanvier.talktome.controller.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 fun loginNavClick(view: View){
+    val loginActivty=Intent(this, LoginActivity::class.java)
+    startActivity(loginActivty)
 
 }
 
