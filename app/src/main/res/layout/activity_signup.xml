@@ -7,11 +7,11 @@
     tools:context="com.kevinjanvier.talktome.controller.CreateUserActivity">
 
     <include
-    android:id="@+id/toolbar"
-    layout="@layout/toolbar"
-    app:layout_constraintEnd_toEndOf="parent"
-    tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints" />
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="0dp" />
 
     <EditText
         android:id="@+id/createUsername"
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CreateAvator"
+        app:layout_constraintTop_toBottomOf="@+id/createAvator"
         app:layout_constraintVertical_bias="0.212" />
 
     <Button
@@ -76,12 +76,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/CreateAvator"
+        android:id="@+id/createAvator"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
         android:onClick="generateuserAvatar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:srcCompat="@drawable/profiledefault" />
@@ -104,11 +105,13 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
+        android:textSize="18sp"
         android:text="@string/tab_to_generate_user_avatar"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toBottomOf="@+id/CreatePassword" />
 </android.support.constraint.ConstraintLayout>
