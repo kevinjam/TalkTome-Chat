@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.kevinjanvier.talktome.R
+import com.kevinjanvier.talktome.services.AuthService
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
@@ -33,9 +34,7 @@ class CreateUserActivity : AppCompatActivity() {
 
     }
 
-    fun createUserClicked(view :View){
 
-    }
     fun generateColorClicked(view: View){
         val random = Random()
         val r = random.nextInt(255)
@@ -50,5 +49,19 @@ class CreateUserActivity : AppCompatActivity() {
 
         avatarColor ="[$savedR, $savedG, $savedB"
 
+    }
+
+    fun createUserClicked(view :View){
+
+        AuthService.registerUser(this, "email@gmail.com", "12345"){
+            complete->
+            if (complete == true){
+
+                print("SUccess $complete")
+            }else{
+                print("Errror $complete")
+
+            }
+        }
     }
 }
