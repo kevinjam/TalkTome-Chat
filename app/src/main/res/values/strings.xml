@@ -9,4 +9,5 @@
     <string name="please_log_in">Please Log in</string>
     <string name="message">Message</string>
     <string name="send_message">send message</string>
+    <string name="tab_to_generate_user_avatar">Tab to generate user avatar</string>
 </resources>

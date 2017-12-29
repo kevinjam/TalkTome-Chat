@@ -1,5 +1,6 @@
 package com.kevinjanvier.talktome.controller
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signUpClick(view:View){
-
+        startActivity(Intent(this, CreateUserActivity::class.java))
     }
 }
