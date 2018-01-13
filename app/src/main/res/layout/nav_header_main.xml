@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:layout_constraintBottom_toTopOf="@+id/loginnavBtn"
@@ -25,7 +26,7 @@
         app:srcCompat="@drawable/profiledefault" />
 
     <TextView
-        android:id="@+id/userEmailNavHeader"
+        android:id="@+id/userNameNavHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -47,7 +48,7 @@
         android:layout_marginStart="28dp"
         android:text="dev@gmail.com"
         app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
-        app:layout_constraintTop_toBottomOf="@+id/userEmailNavHeader"
+        app:layout_constraintTop_toBottomOf="@+id/userNameNavHeader"
         tools:text="dev@gmail.com" />
 
     <Button
