@@ -1,11 +1,15 @@
 package com.kevinjanvier.talktome.controller
 
+import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.view.View
+import android.widget.Toast
 import com.kevinjanvier.talktome.R
 import com.kevinjanvier.talktome.services.AuthService
+import com.kevinjanvier.talktome.utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
@@ -17,6 +21,8 @@ class CreateUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        createSpinner.visibility = View.INVISIBLE
     }
 
     fun generateuserAvatar(view : View){
@@ -52,16 +58,65 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     fun createUserClicked(view :View){
+        enableSpinner(true)
+        val username = createUsername.text.toString()
+        val password = createPassword.text.toString()
+        val email = createemail.text.toString()
 
-        AuthService.registerUser(this, "email@gmail.com", "12345"){
-            complete->
-            if (complete == true){
+        if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
+            AuthService.registerUser(this, email, password){ registerSuccess->
+                println("Message $registerSuccess")
+                if (registerSuccess){
+                    AuthService.loginUser(this, email, password){
+                        loginSuccess->
+                        if (loginSuccess){
+                            AuthService.createUser(this, username, email, userAvatar, avatarColor){createSuccess->
+                                if (createSuccess){
+                                    //local broadcast Manager
+                                    val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
+                                    LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
+                                    enableSpinner(false)
+                                    finish()
 
-                print("SUccess $complete")
-            }else{
-                print("Errror $complete")
+                                }else{
+                                    errorToast()
+                                }
+                            }
+                        }else{
+                            errorToast()
+                        }
+                    }
+                    print("Success $registerSuccess")
+                }else{
+                    print("Error $registerSuccess")
+                    errorToast()
 
+                }
             }
+        }else{
+            Toast.makeText(this,"Make sure username , email , password is not empty", Toast.LENGTH_SHORT).show()
+
+            enableSpinner(false)
         }
+
+
+
+    }
+
+    fun enableSpinner(enable:Boolean){
+        if (enable){
+            createSpinner.visibility = View.VISIBLE
+        }else{
+            createSpinner.visibility = View.INVISIBLE
+        }
+
+        createUserbtn.isEnabled = !enable
+        createAvator.isEnabled = !enable
+        createColorbtn.isEnabled =!enable
+    }
+
+    fun errorToast(){
+        Toast.makeText(this,"Something went wrong !", Toast.LENGTH_SHORT).show()
+        enableSpinner(false)
     }
 }
