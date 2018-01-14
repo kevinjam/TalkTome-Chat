@@ -1,6 +1,7 @@
 package com.kevinjanvier.talktome.services
 
 import android.graphics.Color
+import com.kevinjanvier.talktome.controller.App
 import java.util.*
 
 /**
@@ -42,8 +43,8 @@ object UserDataService {
         var avatarName =""
         var email =""
         var name =""
-        AuthService.authToken = ""
-        AuthService.userEmail =""
-        AuthService.isLogin = false
+        App.prefs.authToken = ""
+        App.prefs.userEmail =""
+        App.prefs.islogginIn = false
     }
 }
