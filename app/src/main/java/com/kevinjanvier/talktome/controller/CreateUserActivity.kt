@@ -64,13 +64,13 @@ class CreateUserActivity : AppCompatActivity() {
         val email = createemail.text.toString()
 
         if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
-            AuthService.registerUser(this, email, password){ registerSuccess->
+            AuthService.registerUser( email, password){ registerSuccess->
                 println("Message $registerSuccess")
                 if (registerSuccess){
-                    AuthService.loginUser(this, email, password){
+                    AuthService.loginUser( email, password){
                         loginSuccess->
                         if (loginSuccess){
-                            AuthService.createUser(this, username, email, userAvatar, avatarColor){createSuccess->
+                            AuthService.createUser( username, email, userAvatar, avatarColor){createSuccess->
                                 if (createSuccess){
                                     //local broadcast Manager
                                     val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)

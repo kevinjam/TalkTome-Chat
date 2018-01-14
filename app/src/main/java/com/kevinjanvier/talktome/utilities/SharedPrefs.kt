@@ -27,5 +27,5 @@ class SharedPrefs (context: Context){
     get() = prefs.getString(USER_EMAIL, "")
     set(value) = prefs.edit().putString(USER_EMAIL, value).apply()
 
-    val ewquesrQueue = Volley.newRequestQueue(context)
+    val requestQueue = Volley.newRequestQueue(context)
 }

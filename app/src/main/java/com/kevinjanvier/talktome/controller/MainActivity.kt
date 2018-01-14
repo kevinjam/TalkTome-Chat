@@ -23,12 +23,14 @@ import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
     lateinit var channelAdapter :ArrayAdapter<Channel>
+    var selectedChannel :Channel?=null
 
 
     private fun setUpadapter(){
@@ -46,6 +48,15 @@ class MainActivity : AppCompatActivity() {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         setUpadapter()
+
+
+        channel_list.setOnItemClickListener{
+            _, _, i, _ ->
+
+            selectedChannel = MessageService.channels[i]
+            drawer_layout.closeDrawer(GravityCompat.START)
+            updatewithChannel()
+        }
 
 
         if (App.prefs.islogginIn){
@@ -68,17 +79,21 @@ class MainActivity : AppCompatActivity() {
                 userImageNavHeader.setBackgroundColor(UserDataService.returnAvatar(UserDataService.avatarColor))
                 loginnavBtn.text = "Logout"
 
-
-                MessageService.getChannels(context!!){
+                MessageService.getChannels{
                     complete->
                     if (complete){
-                        channelAdapter.notifyDataSetChanged()
+                        if (MessageService.channels.count() >0){
+                            selectedChannel = MessageService.channels[0]
+                            channelAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
             }
-
         }
+    }
 
+    fun updatewithChannel(){
+        messagechannelLogin.text = "#${selectedChannel?.name}"
     }
 
 
@@ -121,13 +136,10 @@ class MainActivity : AppCompatActivity() {
             userImageNavHeader.setImageResource(R.drawable.profiledefault)
             userImageNavHeader.setBackgroundColor(Color.TRANSPARENT)
             loginnavBtn.text = "Login"
-
         } else {
             val loginActivty = Intent(this, LoginActivity::class.java)
             startActivity(loginActivty)
         }
-
-
     }
 
     fun addChannelClick(view: View) {
@@ -153,7 +165,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     .show()
         }
-
     }
     
     private val onNewChannel = Emitter.Listener { args ->
@@ -168,25 +179,19 @@ class MainActivity : AppCompatActivity() {
             println(newChannel.name)
             println(newChannel.chanDesc)
             println(newChannel.channelId)
-
-
         }
-
     }
 
     fun sendMessageClick(view: View) {
         hideKeyboard()
-
     }
     /**
      * Function that hide a keyboard
      */
     fun hideKeyboard(){
-
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (inputManager.isAcceptingText){
             inputManager.hideSoftInputFromWindow(currentFocus.windowToken,0)
         }
     }
-
 }

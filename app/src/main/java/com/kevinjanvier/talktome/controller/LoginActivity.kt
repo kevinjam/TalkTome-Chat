@@ -2,7 +2,6 @@ package com.kevinjanvier.talktome.controller
 
 import android.content.Context
 import android.content.Intent
-import android.hardware.input.InputManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,7 +10,6 @@ import android.widget.Toast
 import com.kevinjanvier.talktome.R
 import com.kevinjanvier.talktome.services.AuthService
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_signup.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,9 +28,11 @@ class LoginActivity : AppCompatActivity() {
         hideKeyboard()
         if (email.isNotEmpty() && password.isNotEmpty()){
 
-            AuthService.loginUser(this, email, password) { loginsuccess ->
+            AuthService.loginUser( email, password) {
+                loginsuccess ->
                 if (loginsuccess) {
-                    AuthService.findUserbyEmail(this) { findSuccess ->
+                    AuthService.findUserbyEmail(this) {
+                        findSuccess ->
                         if (findSuccess) {
                             enableSpinner(false)
                             finish()
@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    fun enableSpinner(enable: Boolean) {
+     fun enableSpinner(enable: Boolean) {
         if (enable) {
             loginProgress.visibility = View.VISIBLE
         } else {
