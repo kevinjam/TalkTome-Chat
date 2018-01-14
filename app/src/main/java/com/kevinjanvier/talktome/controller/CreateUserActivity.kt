@@ -57,50 +57,41 @@ class CreateUserActivity : AppCompatActivity() {
 
     }
 
-    fun createUserClicked(view :View){
-        enableSpinner(true)
-        val username = createUsername.text.toString()
-        val password = createPassword.text.toString()
-        val email = createemail.text.toString()
 
-        if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
-            AuthService.registerUser( email, password){ registerSuccess->
-                println("Message $registerSuccess")
-                if (registerSuccess){
-                    AuthService.loginUser( email, password){
-                        loginSuccess->
-                        if (loginSuccess){
-                            AuthService.createUser( username, email, userAvatar, avatarColor){createSuccess->
-                                if (createSuccess){
-                                    //local broadcast Manager
+    fun createUserClicked(view: View) {
+        enableSpinner(true)
+        val userName = createUsername.text.toString()
+        val email = createemail.text.toString()
+        val password = createPassword.text.toString()
+
+        if (userName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+            AuthService.registerUser(email, password) { registerSuccess ->
+                if (registerSuccess) {
+                    AuthService.loginUser(email, password) { loginSuccess ->
+                        if (loginSuccess) {
+                            AuthService.createUser(userName, email, userAvatar, avatarColor) { createSuccess ->
+                                if (createSuccess) {
                                     val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
                                     LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
                                     enableSpinner(false)
                                     finish()
-
-                                }else{
+                                } else {
                                     errorToast()
                                 }
                             }
-                        }else{
+                        } else {
                             errorToast()
                         }
                     }
-                    print("Success $registerSuccess")
-                }else{
-                    print("Error $registerSuccess")
+                } else {
                     errorToast()
-
                 }
             }
-        }else{
-            Toast.makeText(this,"Make sure username , email , password is not empty", Toast.LENGTH_SHORT).show()
-
+        } else {
+            Toast.makeText(this, "Make sure user name, email, and password are filled in.",
+                    Toast.LENGTH_LONG).show()
             enableSpinner(false)
         }
-
-
-
     }
 
     fun enableSpinner(enable:Boolean){

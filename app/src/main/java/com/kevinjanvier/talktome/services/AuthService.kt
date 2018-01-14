@@ -9,10 +9,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.kevinjanvier.talktome.controller.App
-import com.kevinjanvier.talktome.utilities.BROADCAST_USER_DATA_CHANGE
-import com.kevinjanvier.talktome.utilities.URL_CREATE_USER
-import com.kevinjanvier.talktome.utilities.URL_LOGIN
-import com.kevinjanvier.talktome.utilities.URL_REGISTER
+import com.kevinjanvier.talktome.utilities.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -106,7 +103,7 @@ object AuthService {
 
     }
 
-    fun createUser( name:String, email:String, avatarName:String, avatarColor:String, complete: (Boolean) -> Unit){
+    fun createUser(name: String, email: String, avatarName: String, avatarColor: String, complete: (Boolean) -> Unit) {
 
         val jsonBody = JSONObject()
         jsonBody.put("name", name)
@@ -115,25 +112,29 @@ object AuthService {
         jsonBody.put("avatarColor", avatarColor)
         val requestBody = jsonBody.toString()
 
-        val createRequest = object :JsonObjectRequest(Method.POST, URL_CREATE_USER, null, Response.Listener {response->
+        val createRequest = object : JsonObjectRequest(Method.POST, URL_CREATE_USER, null, Response.Listener { response ->
 
             try {
+
                 UserDataService.name = response.getString("name")
                 UserDataService.email = response.getString("email")
                 UserDataService.avatarName = response.getString("avatarName")
                 UserDataService.avatarColor = response.getString("avatarColor")
                 UserDataService.id = response.getString("_id")
                 complete(true)
-            }catch (e:JSONException){
-                Log.e("JSON", "EXC" +e.localizedMessage)
+
+            } catch (e: JSONException) {
+                Log.d("JSON", "EXC " + e.localizedMessage)
                 complete(false)
             }
 
-        }, Response.ErrorListener {error ->
-            Log.e("ERROR", "Could not Create user $error")
+        }, Response.ErrorListener { error ->
+            Log.d("ERROR", "Could not add user: ${error.toString()}")
+            Log.e("ERRRR " ,"Bugs is here"+ error.message)
 
+            complete(false)
+        }) {
 
-        }){
             override fun getBodyContentType(): String {
                 return "application/json; charset=utf-8"
             }
@@ -148,33 +149,71 @@ object AuthService {
                 return headers
             }
         }
+
         App.prefs.requestQueue.add(createRequest)
     }
 
-    fun findUserbyEmail(context: Context, complete: (Boolean) -> Unit){
-        val findUserRequest = object :JsonObjectRequest(Method.GET, "$URL_CREATE_USER${App.prefs.userEmail}", null, Response.Listener {
-//            response->
+//    fun findUserbyEmail(context: Context, complete: (Boolean) -> Unit){
+//        val findUserRequest = object :JsonObjectRequest(Method.GET, "$URL_CREATE_USER${App.prefs.userEmail}", null, Response.Listener {
+////            response->
+//            try {
+//                UserDataService.name = it.getString("name")
+//                UserDataService.email = it.getString("email")
+//                UserDataService.avatarName = it.getString("avatarName")
+//                UserDataService.avatarColor = it.getString("avatarColor")
+//                UserDataService.id = it.getString("_id")
+//
+//                val userDatachange = Intent(BROADCAST_USER_DATA_CHANGE)
+//                LocalBroadcastManager.getInstance(context).sendBroadcast(userDatachange)
+//                complete(true)
+//
+//            }catch (e:JSONException){
+//                Log.e("JSON", "EXC " +e.localizedMessage)
+//            }
+//
+//
+//
+//        }, Response.ErrorListener { error ->
+//            Log.e("ERROR", "Couln not find user")
+//            complete(false)
+//        }){
+//            override fun getBodyContentType(): String {
+//                return "application/json; charset=utf-8"
+//            }
+//
+//            override fun getHeaders(): MutableMap<String, String> {
+//                val headers = HashMap<String, String>()
+//                headers.put("Authorization", "Bearer ${App.prefs.authToken}")
+//                return headers
+//            }
+//        }
+//
+//        App.prefs.requestQueue.add(findUserRequest)
+//
+//    }
+
+    fun findUserbyEmail(context: Context, complete: (Boolean) -> Unit) {
+        val findUserRequest = object: JsonObjectRequest(Method.GET, "$URL_GET_USER${App.prefs.userEmail}", null, Response.Listener { response ->
+
             try {
-                UserDataService.name = it.getString("name")
-                UserDataService.email = it.getString("email")
-                UserDataService.avatarName = it.getString("avatarName")
-                UserDataService.avatarColor = it.getString("avatarColor")
-                UserDataService.id = it.getString("_id")
+                UserDataService.name = response.getString("name")
+                UserDataService.email = response.getString("email")
+                UserDataService.avatarName = response.getString("avatarName")
+                UserDataService.avatarColor = response.getString("avatarColor")
+                UserDataService.id = response.getString("_id")
 
-                val userDatachange = Intent(BROADCAST_USER_DATA_CHANGE)
-                LocalBroadcastManager.getInstance(context).sendBroadcast(userDatachange)
+                val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(userDataChange)
                 complete(true)
-
-            }catch (e:JSONException){
-                Log.e("JSON", "EXC " +e.localizedMessage)
+            } catch (e: JSONException) {
+                Log.d("JSON", "EXC: " + e.localizedMessage)
             }
 
-
-
         }, Response.ErrorListener { error ->
-            Log.e("ERROR", "Couln not find user")
+            Log.d("ERROR", "Could not find user.")
             complete(false)
-        }){
+        }) {
+
             override fun getBodyContentType(): String {
                 return "application/json; charset=utf-8"
             }
@@ -187,6 +226,5 @@ object AuthService {
         }
 
         App.prefs.requestQueue.add(findUserRequest)
-
     }
 }

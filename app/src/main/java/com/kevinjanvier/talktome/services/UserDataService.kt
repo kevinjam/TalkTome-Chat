@@ -21,7 +21,6 @@ object UserDataService {
                 .replace("[", "")
                 .replace("]", "")
                 .replace(",", "")
-
         var r  =0
         var g = 0
         var b = 0
@@ -30,9 +29,7 @@ object UserDataService {
             r = (scanner.nextDouble() * 255).toInt()
             g = (scanner.nextDouble() * 255).toInt()
             b = (scanner.nextDouble() * 255).toInt()
-
         }
-
         return Color.rgb(r,g,b)
     }
 
@@ -46,5 +43,8 @@ object UserDataService {
         App.prefs.authToken = ""
         App.prefs.userEmail =""
         App.prefs.islogginIn = false
+
+        MessageService.clearMessages()
+        MessageService.clearChannel()
     }
 }
